@@ -1,0 +1,38 @@
+{
+  "name": "seca-ipw-p1-leic2324i-ipw31d-g08",
+  "version": "1.0.0",
+  "description": "seca-ipw-p1-leic2324i-ipw31d-g08 created by GitHub Classroom",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node seca-server.mjs",
+    "start-dev": "nodemon seca-server.mjs",
+    "start-pass": "nodemon seca-server-passaport.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isel-leic-ipw/seca-ipw-p1-leic2324i-ipw31d-g08.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isel-leic-ipw/seca-ipw-p1-leic2324i-ipw31d-g08/issues"
+  },
+  "homepage": "https://github.com/isel-leic-ipw/seca-ipw-p1-leic2324i-ipw31d-g08#readme",
+  "dependencies": {
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
+    "chai-subset": "^1.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "hbs": "^4.2.0",
+    "kubectl": "^0.0.0",
+    "mocha": "^10.2.0",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.0.1",
+    "passport": "^0.7.0",
+    "swagger-ui-express": "^5.0.0",
+    "yamljs": "^0.3.0"
+  }
+}
