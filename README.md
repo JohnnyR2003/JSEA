@@ -1,1 +1,1 @@
-# JSEA
+# JSEA -  Johnny Shows & Events Application
