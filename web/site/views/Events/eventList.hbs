@@ -1,0 +1,21 @@
+<h1>This are the Events</h1>
+<ul>
+    {{#unless popularEvents}}
+        <li>
+            <h2>No events found for this page or limit too high</h2>
+        </li>
+    {{/unless}}
+    {{#each popularEvents}}
+        <li>
+            <!-- <h2>{{this.EventId}}</h2> -->
+            <!--<h2>{{this.eventName}}</h2> -->
+            <form action="./oneEvent/{{this.EventId}}" method="GET">
+                <input type="hidden" name="eventName" value="{{this.eventName}}">
+                <h2>
+                    <button type="submit" style="border: none; background-color: transparent; cursor: pointer;">{{this.eventName}}</button>
+                </h2>
+            </form>
+            <p>{{this.eventDate}}</p>
+        </li>
+    {{/each}}
+</ul>

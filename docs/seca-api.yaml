@@ -1,0 +1,529 @@
+openapi: 3.0.1
+info:
+  title: Routes API
+  description: This is a simple API for managing routes
+  version: 1.0.0
+servers:
+  - description: Localhost server for testing API
+    url: http://localhost:6969
+
+security:
+  - bearerAuth: []
+tags:
+- name: Group
+- name: Events
+- name: Users
+paths:
+  /popularEvents:
+    get:
+      tags:
+      - Events
+      summary: get most popular Events
+      description: By passing in the appropriate options, you can see the
+        most popular Events
+      operationId: getEvents
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 0
+          description: number of events to be returned (default 30)
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+          description: page number (default 1)
+      responses:
+        '200':
+          description: get the most popular events with the specified limit and pagination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Popular'
+        '400':
+          $ref: "#/components/responses/400BadRequest" 
+  /searchEvent/{name}:
+    get:
+      tags:
+      - "Events"
+      summary: get most popular Events from a specified name
+      description: By passing in the appropriate options, you can see the
+        most popular Events from a specified name
+      operationId: getEventsByName
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            minimum: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 0
+          description: number of events to be returned (default 30)
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+          description: page number (default 1)
+      responses:
+        '200':
+          description: get the most popular events with the specified limit and pagination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: "#/components/responses/400BadRequest"
+  /users:
+    post:
+      tags:
+      - Users
+      summary: Create a user
+      description: Create a user to the system
+      operationId: createUser
+      security: []
+      requestBody:
+        description: User to Create
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+              $ref: '#/components/schemas/NewUser'
+        required: true
+      responses:
+        201:
+          description: user created
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - newUser
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: User with id newUser.token created
+                  newUser:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: uuid
+                      username:
+                        type: string
+                        example: username
+                      groups: 
+                        type: array
+                        items:
+                          type: object
+                          example: groups
+        400:
+          description: Invalid input, object invalid
+          content: {}
+          $ref: "#/components/responses/400BadRequest"
+  /group:         
+    get:
+      tags:
+      - Group
+      summary: Get all groups from a user
+      description: Returns an object with the users groups
+      operationId: getGroups
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Group created
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - groups
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Groups of user with token user.token
+                  groups: 
+                        type: array
+                        items:
+                          type: object
+                          example: {id: group.id, name: sou lindo ronaldo, description: joao neves ftw, events: []}  
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /group/details/{id}:
+    get:
+      tags:
+      - Group
+      summary: Get the details of a group
+      operationId: getGroup
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+        description: id of the group
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - groups
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Groups with id group.id
+                  groups: 
+                        type: array
+                        items:
+                          type: object
+                          example: {id: group.id, name: sou lindo ronaldo, description: joao neves ftw, events: []}  
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        404:
+          $ref: "#/components/responses/404NotFound"
+  /group/create/:
+    post:
+      tags:
+      - Group
+      summary: Creates a new group
+      operationId: createGroup
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              properties:
+                name:
+                  type: string
+                  example: joao neves
+                description:
+                  type: string
+                  example: benfas >> sporting
+      responses:
+        201:
+          description: Group created
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - newGroup
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Group with id group.id created
+                  newGroup: 
+                        type: object
+                        example: {id: group.id, name: group name, description: group description, events: []}
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /group/addEvent{id}:
+    post:
+      tags:
+      - Group
+      summary: Adds an event to a group
+      operationId: addEvent
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+        description: id of the group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - eventId
+              properties:
+                eventId:
+                  type: string
+                  example: id do evento
+      responses:
+        201:
+          description: Event added
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - event
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Event with id event.id added
+                  event:
+                    type: object
+                    example: { name: event name, date: event date, genre: event genre, segement: event segement}
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /group/editGroup/{id}:
+    put:
+      tags:
+      - Group
+      summary: Edits a group
+      operationId: editGroup
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+        description: id of the group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        201:
+          description: Group edited
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - groups
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Group with id editedGroup.id edited
+                  groups: 
+                        type: array
+                        items:
+                          type: object
+                          example: {id: group.id, name: name edited, description: description edited, events: []}  
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /group/delete/{id}:
+    delete:
+      tags:
+      - Group
+      summary: Deletes a group
+      operationId: deleteGroup
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+        description: id of the group
+      responses:
+        201:
+          description: Group deleted
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - groups
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Group with id deletedGroup.id deleted
+                  groups: 
+                        type: array
+                        items:
+                          type: object
+                          example: {id: group.id, name: name edited, description: description edited, events: []}  
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /group/removeEvent/{id}/{eventid}:
+    delete:
+      tags:
+      - Group
+      summary: Removes an event from a group
+      operationId: removeEvent
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+        description: id of the group
+      - name: eventid
+        in: path
+        required: true
+        schema:
+          type: string
+          minimum: 1
+        description: id of the event to be deleted
+      responses:
+        201:
+          description: Event removed
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - deletedEvent
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Event with name Event name removed
+                  deletedEvent: 
+                        type: object
+                        example: {name: event name, date: event date, genre: event genre, segement: event segement} 
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+  schemas:
+    Popular: 
+        type: object
+        example:
+          [{event id: id, event name: name, event date: date}]
+        properties:
+          popular:
+            type: array
+            description: Array containing the popular events ids
+    NewUser:
+      type: object
+      required:
+      - userName
+      properties:
+        userName:
+          type: string
+          example: jhonny.macaronni
+    Event:
+      type: object
+      example: 
+          [{event id: 'id_of_event',
+          event name: 'name_of_event',
+          event date: 'date_of_event'}]
+      properties:
+        event: 
+          type: object
+          properties:
+            id:
+              type: string
+              description: The id of the event
+            name:
+              type: string
+              description: The name of the event
+            date:
+              type: string
+              description: The date of the event
+    NotFound:
+      type: object
+      properties:
+        uri:
+          type: string
+          format: uri
+          example: "/tasks/1"
+        description:
+          type: string
+          example: "Task with id 1 not found"
+    MissingParameter:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Missing required parameter"
+    InvalidBody:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid body content"
+    Unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Unauthorized"
+  responses: 
+    404NotFound:
+      description: "Resource not found"
+      content: 
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/NotFound"
+    400BadRequest:
+      description: "Invalid Request because of a missing Parameter or invalid body content"
+      content: 
+        application/json:
+          schema: 
+            oneOf:
+              - $ref: "#/components/schemas/MissingParameter"
+              - $ref: "#/components/schemas/InvalidBody"
+    Unauthorized:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+
+    
+              
+            
+      

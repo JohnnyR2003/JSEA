@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    .topnav a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .topnav a.active {
+      background-color: #5404aa;
+      color: white;
+    }
+
+    .topnav .icon {
+      display: none;
+    }
+
+    @media screen and (max-width: 600px) {
+      .topnav a:not(:first-child) {
+        display: none;
+      }
+
+      .topnav a.icon {
+        float: right;
+        display: block;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .topnav.responsive {
+        position: relative;
+      }
+
+      .topnav.responsive .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      .topnav.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+    }
+  </style>
+  <title>Welcome to SECA</title>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <div class="topnav" id="myTopnav">
+    <a href="./home" class="active">Home</a>
+    <a href="./popularEvents">Get the Top Events</a>
+    <a href="./searchEvents">Search an Event</a>
+    <a href="../private/register">Register</a>
+    <a href="../private/login">Login</a>
+    <a href="javascript:void(0);" class="icon" onclick="toggleNav()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+
+  <!-- Showcase -->
+  <section class="bg-dark text-light p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
+    <div class="container">
+      <div class="d-sm-flex align-items-center justify-content-between">
+        <div>
+          <h1>Welcome to SECA - <span class="text-warning">Your Ultimate Event Companion</span></h1>
+          <p class="lead my-4">
+            Discover and explore top events in your area. Whether you're looking for concerts, festivals, or local gatherings, SECA has you covered. Start your journey now!
+          </p>
+          <a class="btn btn-primary btn-lg" href="../private/register">Register for Free</a>
+        </div>
+        <img class="img-fluid w-50 d-none d-sm-block" src="images/event.png" alt=""/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Events Section -->
+  <section class="bg-dark text-light p-5">
+    <div class="container mt-5">
+      <h1><span class="text-warning">Popular Events</span></h1>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Placeholder event cards -->
+        {{#each popularEvents}}
+        <div class="col">
+          <div class="event-card bg-white p-4 h-100 d-flex flex-column">
+            <h3 class="mb-0">{{title}}</h3>
+            <p class="text-muted">Name: {{this.eventName}}</p>
+            <p class="text-muted">Date: {{this.eventDate}}</p>
+            <div class="mt-auto">
+          <a
+            href="/site/public/oneEvent/{{this.EventId}}"
+            class="btn btn-primary"
+          >Details</a>
+</div>
+          </div>
+        </div>
+        {{/each}}
+        <!-- End of placeholder event cards -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="bg-warning text-dark p-5">
+    <div class="container">
+      <div class="d-md-flex justify-content-between align-items-center">
+        <h3 class="mb-3 mb-md-0">Sign Up For Our Newsletter</h3>
+        <div class="input-group news-input">
+          <input type="text" id="news" class="form-control" placeholder="Enter Email" />
+          <button class="btn btn-dark btn-lg" type="button">Submit</button>
+        </div>
+      </div>
+    </div>
+  </section> 
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function toggleNav() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+  </script>
+</body>
+
+</html>
