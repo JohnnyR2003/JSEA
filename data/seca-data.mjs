@@ -6,7 +6,7 @@ export async function makeRequest(list, action, limit, page, id, name) {
     if (!isNaN(limit))
         l = limit
     else
-        l = 30
+        l = 9
 
     let p
     if (!isNaN(page))
@@ -21,7 +21,6 @@ export async function makeRequest(list, action, limit, page, id, name) {
     try {
         let rsp = await fetch(URL)
         let obj = await rsp.json()
-        //console.log(obj)
         return action(obj, list)
     } catch (e) {
         console.log(e)
@@ -31,7 +30,17 @@ export async function makeRequest(list, action, limit, page, id, name) {
 
 export function PopularEvents(obj, listOfEvents) {
     //let date = obj["_embedded"].events.dates['start'].localDate
-    obj["_embedded"].events.forEach(event => listOfEvents.push({EventId: event.id, eventName: event.name, eventDate : event.dates['start'].localDate}));
+    //obj["_embedded"].events.forEach(event => listOfEvents.push({EventId: event.id, eventName: event.name, eventDate : event.dates['start'].localDate}));
+    let sortedEvents = sortEventsByDate(obj["_embedded"].events)
+    sortedEvents.forEach(event => listOfEvents.push({ EventId: event.id, eventName: event.name, eventDate: event.dates['start'].localDate }));
+}
+
+function sortEventsByDate(listOfEvents) {
+    return listOfEvents.sort((a, b) => {
+        let dateA = new Date(a.dates['start'].localDate);
+        let dateB = new Date(b.dates['start'].localDate);
+        return dateA - dateB;
+    });
 }
 
 export function getEventsByName(obj, listOfEvents) {

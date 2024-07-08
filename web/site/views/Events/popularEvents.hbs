@@ -1,15 +1,11 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: url("https://media.tenor.com/0tMEVz3MTzsAAAAC/lego-batman-falls-in-love.gif");
-      background-size: 50%;
-    }
-
     .topnav {
       overflow: hidden;
       background-color: #333;
@@ -31,7 +27,7 @@
     }
 
     .topnav a.active {
-      background-color: #5404aa;
+      background-color: #128189;
       color: white;
     }
 
@@ -67,147 +63,161 @@
         text-align: left;
       }
     }
+
+    .showcase-gradient {
+      background: linear-gradient(to bottom, #ff7e5f, #feb47b);
+      color: #fff;
+      padding: 5rem 0;
+    }
+
+    .btn-gradient:hover {
+      background: linear-gradient(to right, #2a5298, #1e3c72);
+    }
+
+    .upcoming-events-gradient {
+      background: linear-gradient(to bottom right, #2a5298, #1e3c72);
+      color: #fff;
+      padding: 5rem 0;
+    }
+
+    .newsletter {
+      background-color: #ffcc00;
+      color: #333;
+      padding: 5rem 0;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .pagination .page-link {
+      margin: 0 5px;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .pagination .page-link:hover {
+      background-color: #ddd;
+    }
+
+    .bg-dark {
+      background-color: #333 !important;
+      color: #fff !important;
+    }
+
+    .bg-dark-transparent {
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+    }
+
+    .form-label {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .form-control {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333;
+    }
+
+    .form-control::placeholder {
+      color: #666;
+    }
+
+    /* Custom card border color */
+    .custom-card {
+      border: 2px solid #128189; /* Change this color to your desired outline color */
+    }
   </style>
+  <title>Welcome to JSEA</title>
 </head>
-  <body>
-        <div class="topnav" id="myTopnav">
-            {{#unless flag}}
-            <a href="./home" class="active">Home</a>
-            {{else}}
-            <a href="../private/Userhome" class="active">Home</a>
-            {{/unless}}
-            <a href="./popularEvents">Get the Top Events</a>
-            <a href="./searchEvents">Search a event</a>
-            {{#unless flag}}
-            <a href="../private/register">Register</a>
-            <a href="../private/login">Login</a>
-            {{else}}
-            <a href="../private/logout" onclick="confirm('Bro finalmente vais sair\n espero que nao venhas mais\n mas lembra te memso ao sair daqui\n es icrivel')">Logout</a>
-            {{/unless}}
-        </div>
-
-
-        <div class="pagination">
-            <!-- Previous Page Arrow -->
-            <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
-
-            <!-- Page Links / Input Fields -->
-            <!-- <a class="page-link" href="./popularEvents?page=1" id="page1" onclick="updateContent(1)">1</a> -->
-            <a class="page-link" href="./popularEvents?page=2" id="page2" onclick="updateContent(2)">2</a>
-            <a class="page-link" href="./popularEvents?page=3" id="page3" onclick="updateContent(3)">3</a>
-            <!-- Add more page links as needed -->
-
-            <!-- Next Page Arrow -->
-            <a class="page-link" href="#" id="nextPage" onclick="nextPage()">Next &gt;</a>
-
-            <!-- Page Input Field -->
-            <!-- <input type="number" id="pageInput" class="page-input" placeholder="Page"> -->
-            <!-- <button onclick="goToEnteredPage()">Go</button> -->
-        </div>
-
-        
-  </body>
-
-<form action="./popularEvents" method="GET" id="searchForm">
-  <label for="limit" style="background-color: black; color: white">Limit:</label>
-  <input type="number" id="limit" name="limit" value="{{limitQueryParam}}">
-  <p></p>
-  <label for="page" style="background-color: black; color: white">Page:</label>
-  <input type="number" id="page" name="page" >
-  <p></p>
-  <button type="submit">Procurar</button>
-</form>
-
-<h1>This are the Events</h1>
-<ul>
-    {{#unless popularEvents}}
-        <li>
-            <h2>No events found for this page or limit too high</h2>
-        </li>
+<body>
+  <!-- Navigation -->
+  <div class="topnav" id="myTopnav">
+    {{#unless flag}}
+    <a href="./home" class="active">Home</a>
+    {{else}}
+    <a href="../private/Userhome" class="active">Home</a>
     {{/unless}}
-    {{#each popularEvents}}
-        <li>
-            <!-- <h2>{{this.EventId}}</h2> -->
-            <!--<h2>{{this.eventName}}</h2> -->
-            <form action="./oneEvent/{{this.EventId}}" method="GET">
-                <input type="hidden" name="eventName" value="{{this.eventName}}">
-                <h2 style="font-size: 50pt;">
-                    <button type="submit" style=" background-color: white; cursor: pointer;">{{this.eventName}} - {{this.eventDate}}</button>
-                </h2>
-            </form>
-            
-        </li>
-    {{/each}}
-</ul>
+    <a href="./popularEvents">Get the Top Events</a>
+    <a href="./searchEvents">Search an Event</a>
+    {{#unless flag}}
+    <a href="../private/register">Register</a>
+    <a href="../private/login">Login</a>
+    {{else}}
+    <a href="../private/logout" onclick="confirm('Are you sure you want to log out?')">Logout</a>
+    {{/unless}}
+    <a href="javascript:void(0);" class="icon" onclick="toggleNav()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
 
+  <!-- Search Form -->
+  <form action="./popularEvents" method="GET" id="searchForm" class="bg-dark-transparent text-light p-3">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <label for="limit" class="form-label">Limit:</label>
+          <input type="number" id="limit" name="limit" value="{{limitQueryParam}}" class="form-control" placeholder="Enter limit">
+        </div>
+        <div class="col">
+          <label for="page" class="form-label">Page:</label>
+          <input type="number" id="page" name="page" class="form-control" placeholder="Enter page">
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+      </div>
+    </div>
+  </form>
 
-<script>
-            const totalPages = 99; // Set the total number of pages
+  <!-- Event List -->
+  <section class="bg-dark text-dark p-5">
+    <div class="container mt-5">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#each popularEvents}}
+        <div class="col mb-4">
+          <div class="card custom-card bg-transparent p-4 h-100 d-flex flex-column">
+            <div class="card-body">
+              <h3 class="card-title">{{this.eventName}}</h3>
+              <p class="card-text text-muted">Date: {{this.eventDate}}</p>
+              <div class="mt-auto">
+                <a href="/site/public/oneEvent/{{this.EventId}}" class="btn btn-primary">Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
 
-            // Initial page
-            //let currentPage = parseInt(localStorage.getItem('currentPage')) || 1;;
+  <!-- Pagination -->
+  <div class="pagination">
+    <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
+    <a class="page-link" href="./popularEvents?page=2" id="page2" onclick="updateContent(2)">2</a>
+    <a class="page-link" href="./popularEvents?page=3" id="page3" onclick="updateContent(3)">3</a>
+    <a class="page-link" href="#" id="nextPage" onclick="nextPage()">Next &gt;</a>
+  </div>
 
-            function getQueryParam(name) {
-              const urlParams = new URLSearchParams(window.location.search);
-              return urlParams.get(name);
-            }
+  <script>
+    const totalPages = 99;
 
-            const pageQueryParam = getQueryParam('page');
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
 
-            let currentPage;   
-            let limitQueryParam = getQueryParam('limit');
-
-            if (limitQueryParam === null || limitQueryParam === "") {
-              limitQueryParam = "defaultLimitValue"; // Defina o valor padrão para o parâmetro limit quando estiver vazio
-            }
-            
-            if(pageQueryParam !== null){
-              currentPage = parseInt(localStorage.getItem('currentPage'));  
-            }else {
-              currentPage=1;
-            }
-
-            // Function to update the content based on the selected page
-            function updateContent(page) {
-              const pageInput = document.getElementById('page');
-              const pageValue = parseInt(pageInput.value);
-              // Add logic to fetch and display content for the specified page
-              if (!isNaN(pageValue) && pageValue >= 1 && pageValue <= totalPages) {
-                console.log(`Fetching content for page ${pageValue}`);
-                //currentPage = pageValue;
-                localStorage.setItem('currentPage', currentPage);
-              } else {
-                localStorage.setItem('currentPage', currentPage); 
-              }
-              //console.log(`Fetching content for page ${page}`);
-              //currentPage = page;
-              //localStorage.setItem('currentPage', currentPage);
-              // Insert current page value on the query string
-              //document.getElementById('pageInput').value = page;
-            }
-
-            function nextPage(){
-              if(currentPage < totalPages){
-                  currentPage++;
-                  updateContent(currentPage);
-                  //document.getElementById('page').value = currentPage;
-                  window.location.href = `./popularEvents?page=${currentPage}`;
-              }
-            }
-
-            function prevPage(){
-              if(currentPage > 1){
-                  currentPage--;
-                  updateContent(currentPage);
-                  //document.getElementById('page').value = currentPage;
-                  window.location.href = `./popularEvents?page=${currentPage}`;
-              }
-            }
-
-            /*window.addEventListener('beforeunload', function () {
-              // Remove currentPage only if the user is leaving the popularEvents page
-              if (!window.location.pathname.includes('popularEvents')) {
-                localStorage.removeItem('currentPage');
-              }
-            });*/
-        </script>
+    const pageQueryParam = getQueryParam('page');
+    let currentPage;
+    let limitQueryParam = getQueryParam('limit');
+  </script>
+</body>
+</html>
