@@ -142,11 +142,11 @@
   <!-- Navigation -->
   <div class="topnav" id="myTopnav">
     {{#unless flag}}
-    <a href="./home" class="active">Home</a>
+    <a href="./home">Home</a>
     {{else}}
-    <a href="../private/Userhome" class="active">Home</a>
+    <a href="../private/Userhome">Home</a>
     {{/unless}}
-    <a href="./popularEvents">Get the Top Events</a>
+    <a href="./popularEvents" class="active">Get the Top Events</a>
     <a href="./searchEvents">Search an Event</a>
     {{#unless flag}}
     <a href="../private/register">Register</a>
@@ -160,15 +160,13 @@
   </div>
 
   <!-- Search Form -->
-  <form action="./popularEvents" method="GET" id="searchForm" class="bg-dark-transparent text-light p-3">
+  <form action="./popularEvents" method="GET" id="searchForm" class="bg-dark text-light p-3">
     <div class="container">
       <div class="row">
         <div class="col">
-          <label for="limit" class="form-label">Limit:</label>
           <input type="number" id="limit" name="limit" value="{{limitQueryParam}}" class="form-control" placeholder="Enter limit">
         </div>
         <div class="col">
-          <label for="page" class="form-label">Page:</label>
           <input type="number" id="page" name="page" class="form-control" placeholder="Enter page">
         </div>
         <div class="col">
@@ -199,13 +197,20 @@
     </div>
   </section>
 
-  <!-- Pagination -->
-  <div class="pagination">
-    <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
-    <a class="page-link" href="./popularEvents?page=2" id="page2" onclick="updateContent(2)">2</a>
-    <a class="page-link" href="./popularEvents?page=3" id="page3" onclick="updateContent(3)">3</a>
-    <a class="page-link" href="#" id="nextPage" onclick="nextPage()">Next &gt;</a>
-  </div>
+ <!-- Pagination -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
+      </li>
+      {{#each pages}}
+      <li class="page-item"><a class="page-link" href="./searchEvents?page={{this.number}}" onclick="updateContent({{this.number}})">{{this.number}}</a></li>
+      {{/each}}
+      <li class="page-item">
+        <a class="page-link" href="#" id="nextPage" onclick="nextPage()">Next &gt;</a>
+      </li>
+    </ul>
+  </nav>
 
   <script>
     const totalPages = 99;
@@ -216,8 +221,37 @@
     }
 
     const pageQueryParam = getQueryParam('page');
-    let currentPage;
+    let currentPage = pageQueryParam ? parseInt(pageQueryParam) : 1;
     let limitQueryParam = getQueryParam('limit');
+    let eventNameQueryParam = getQueryParam('eventName');
+
+    function updateContent(page) {
+      console.log(`Fetching content for page ${page}`);
+      window.location.href = `./searchEvents?page=${page}&limit=${limitQueryParam}&eventName=${eventNameQueryParam}`;
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateContent(currentPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        updateContent(currentPage);
+      }
+    }
+
+    function toggleNav() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
   </script>
 </body>
 </html>

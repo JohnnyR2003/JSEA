@@ -6,7 +6,7 @@ export async function makeRequest(list, action, limit, page, id, name) {
     if (!isNaN(limit))
         l = limit
     else
-        l = 9
+        l = 6
 
     let p
     if (!isNaN(page))

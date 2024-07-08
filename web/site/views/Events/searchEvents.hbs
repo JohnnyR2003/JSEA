@@ -1,14 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: url("https://media1.giphy.com/media/OfXKySrn0Ej4s/200.gif");
-      background-size: 100%;
-    }
-
     .topnav {
       overflow: hidden;
       background-color: #333;
@@ -30,7 +27,7 @@
     }
 
     .topnav a.active {
-      background-color: #5404aa;
+      background-color: #128189;
       color: white;
     }
 
@@ -66,130 +63,155 @@
         text-align: left;
       }
     }
-  </style>
-</head>
 
+    .event-list {
+      margin-top: 20px;
+    }
+
+    .event-card {
+      background-color: #444;
+      border: 1px solid #128189;
+      color: white;
+    }
+
+    .event-card a {
+      color: #128189;
+      text-decoration: none;
+    }
+
+    .event-card a:hover {
+      color: #ddd;
+    }
+
+    .event-card .btn-primary {
+      color: white;
+    }
+  </style>
+  <title>Search Events</title>
+</head>
 <body>
+  <!-- Navigation -->
   <div class="topnav" id="myTopnav">
     {{#unless flag}}
-    <a href="./home" class="active">Home</a>
+    <a href="./home">Home</a>
     {{else}}
-    <a href="../private/Userhome" class="active">Home</a>
+    <a href="../private/Userhome">Home</a>
     {{/unless}}
     <a href="./popularEvents">Get the Top Events</a>
-    <a href="./searchEvents">Search a event</a>
+    <a href="./searchEvents" class="active">Search an Event</a>
     {{#unless flag}}
     <a href="../private/register">Register</a>
     <a href="../private/login">Login</a>
     {{else}}
-    <a href="../private/logout"
-      onclick="confirm('Bro finalmente vais sair\n espero que nao venhas mais\n mas lembra te memso ao sair daqui\n es icrivel')">Logout</a>
+    <a href="../private/logout" onclick="confirm('Are you sure you want to log out?')">Logout</a>
     {{/unless}}
+    <a href="javascript:void(0);" class="icon" onclick="toggleNav()">
+      <i class="fa fa-bars"></i>
+    </a>
   </div>
 
-  <div class="pagination">
-            <!-- Previous Page Arrow -->
-            <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
-
-            <!-- Page Links / Input Fields -->
-            <!-- <a class="page-link" href="./popularEvents?page=1" id="page1" onclick="updateContent(1)">1</a> -->
-            <a class="page-link" href="./searchEvents?page=2" id="page2" onclick="updateContent(2)">2</a>
-            <a class="page-link" href="./searchEvents?page=3" id="page3" onclick="updateContent(3)">3</a>
-            <!-- Add more page links as needed -->
-
-            <!-- Next Page Arrow -->
-            <a class="page-link" href="#" id="nextPage" onclick="nextPage()">Next &gt;</a>
-
-            <!-- Page Input Field -->
-            <!-- <input type="number" id="pageInput" class="page-input" placeholder="Page"> -->
-            <!-- <button onclick="goToEnteredPage()">Go</button> -->
+  <!-- Search Form -->
+  <form action="./searchEvents" method="GET" class="bg-dark text-light p-3">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <input type="text" id="eventName" name="eventName" value="{{eventNameQueryParam}}" class="form-control" placeholder="Search for an event...">
         </div>
-
-        <script>
-            const totalPages = 99; // Set the total number of pages
-
-            // Initial page
-            //let currentPage = parseInt(localStorage.getItem('currentPage')) || 1;;
-
-            function getQueryParam() {
-              const urlParams = new URLSearchParams(window.location.search);
-              return urlParams.get('page');
-            }
-
-            const pageQueryParam = getQueryParam();
-
-            let currentPage;   
-            
-            if(pageQueryParam !== null){
-              currentPage = parseInt(localStorage.getItem('currentPage'));  
-            }else {
-              currentPage=1;
-            }
-
-            // Function to update the content based on the selected page
-            function updateContent(page) {
-              // Add logic to fetch and display content for the specified page
-              console.log(`Fetching content for page ${page}`);
-              //currentPage = page;
-              localStorage.setItem('currentPage', currentPage);
-              // Insert current page value on the query string
-              //document.getElementById('pageInput').value = page;
-            }
-
-            function nextPage(){
-              if(currentPage < totalPages){
-                  currentPage++;
-                  updateContent(currentPage);
-                  //document.getElementById('page').value = currentPage;
-                  window.location.href = `./searchEvents?page=${currentPage}`;
-              }
-            }
-
-            function prevPage(){
-              if(currentPage > 1){
-                  currentPage--;
-                  updateContent(currentPage);
-                  //document.getElementById('page').value = currentPage;
-                  window.location.href = `./searchEvents?page=${currentPage}`;
-              }
-            }
-
-            /*window.addEventListener('beforeunload', function () {
-              // Remove currentPage only if the user is leaving the popularEvents page
-              if (!window.location.pathname.includes('searchEvents')) {
-                localStorage.removeItem('currentPage');
-              }
-            });*/
-        </script>
-</body>
-
-<p></p>
-<form action="./searchEvents" method="GET">
-  <label for="eventName" style="background-color: black; color: white">Search Event:</label>
-  <input type="text" id="eventName" name="eventName" placeholder="Search for an event...">
-  <p></p>
-  <label for="limit" style="background-color: black; color: white">Limit:</label>
-  <input type="number" id="limit" name="limit">
-  <p></p>
-  <label for="page" style="background-color: black; color: white">Page:</label>
-  <input type="number" id="page" name="page">
-  <p></p>
-  <button type="submit">Procurar</button>
-
-
-  <h1>This are the Events</h1>
-  <ul>
-    {{#unless searchedEvents}}
-        <li>
-            <h2>No events found for this page or limit too high</h2>
-        </li>
-    {{/unless}}
-    {{#each searchedEvents}}
-    <li style="style=font-size: 10pt ; padding: 10px;">
-        <!-- <h2>{{this.EventId}}</h2> -->
-        <h2><a href="./oneEvent/{{this.EventId}}?eventName={{this.eventName}}" style="border:solid;color: black; background-color: white">{{this.eventName}} - {{this.eventDate}}</a></h2>
+        <div class="col">
+          <input type="number" id="limit" name="limit" value="{{limitQueryParam}}" class="form-control" placeholder="Enter limit">
+        </div>
+        <div class="col">
+          <input type="number" id="page" name="page" value="{{pageQueryParam}}" class="form-control" placeholder="Enter page">
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
       </div>
-    </li>
-    {{/each}}
-  </ul>
-</form>
+    </div>
+  </form>
+
+  <!-- Event List -->
+  <section class="bg-dark text-light p-5">
+    <div class="container event-list">
+      <h1 class="mb-4">These are the Events</h1>
+      <div class="row">
+        {{#unless searchedEvents}}
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">
+            No events found for this page or limit too high.
+          </div>
+        </div>
+        {{/unless}}
+        {{#each searchedEvents}}
+        <div class="col-md-4 mb-4">
+          <div class="card event-card">
+            <div class="card-body">
+              <h5 class="card-title">{{this.eventName}}</h5>
+              <p class="card-text">{{this.eventDate}}</p>
+              <a href="./oneEvent/{{this.EventId}}?eventName={{this.eventName}}" class="btn btn-primary">View Event</a>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
+      </li>
+      {{#each pages}}
+      <li class="page-item"><a class="page-link" href="./searchEvents?page={{this.number}}" onclick="updateContent({{this.number}})">{{this.number}}</a></li>
+      {{/each}}
+      <li class="page-item">
+        <a class="page-link" href="#" id="nextPage" onclick="nextPage()">Next &gt;</a>
+      </li>
+    </ul>
+  </nav>
+
+  <script>
+    const totalPages = 99;
+
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const pageQueryParam = getQueryParam('page');
+    let currentPage = pageQueryParam ? parseInt(pageQueryParam) : 1;
+    let limitQueryParam = getQueryParam('limit');
+    let eventNameQueryParam = getQueryParam('eventName');
+
+    function updateContent(page) {
+      console.log(`Fetching content for page ${page}`);
+      window.location.href = `./searchEvents?page=${page}&limit=${limitQueryParam}&eventName=${eventNameQueryParam}`;
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateContent(currentPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        updateContent(currentPage);
+      }
+    }
+
+    function toggleNav() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+  </script>
+</body>
+</html>
