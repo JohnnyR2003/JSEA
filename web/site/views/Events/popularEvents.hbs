@@ -69,11 +69,6 @@
       color: #fff;
       padding: 5rem 0;
     }
-
-    .btn-gradient:hover {
-      background: linear-gradient(to right, #2a5298, #1e3c72);
-    }
-
     .upcoming-events-gradient {
       background: linear-gradient(to bottom right, #2a5298, #1e3c72);
       color: #fff;
@@ -96,25 +91,17 @@
     .pagination .page-link {
       margin: 0 5px;
       padding: 10px 15px;
-      border: 1px solid #ddd;
+      border: none;
       text-decoration: none;
-      color: #333;
+      color: #fff;
+      background: #128189; /* Darker color on hover */ /* Matching gradient background */
+      border-radius: 5px; /* Rounded corners for a modern look */
     }
 
     .pagination .page-link:hover {
-      background-color: #ddd;
+      background: #fff; /* Darker color on hover */
+      color: #128189; /* Matching gradient background */
     }
-
-    .bg-dark {
-      background-color: #333 !important;
-      color: #fff !important;
-    }
-
-    .bg-dark-transparent {
-      background-color: rgba(0, 0, 0, 0.7);
-      color: #fff;
-    }
-
     .form-label {
       color: #fff;
       background-color: rgba(0, 0, 0, 0.5);
@@ -134,6 +121,42 @@
     /* Custom card border color */
     .custom-card {
       border: 2px solid #128189; /* Change this color to your desired outline color */
+    }
+
+    .event-list {
+      margin-top: 20px;
+    }
+
+    .event-card {
+      background-color: #444;
+      border: 1px solid #128189;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .event-card .card-body {
+      flex: 1 1 auto; /* Allow the body to grow */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .event-card .card-title {
+      white-space: nowrap; /* Prevent text from wrapping */
+      overflow: hidden; /* Hide overflowed text */
+      text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+    }
+
+    .event-card .card-text {
+      flex-grow: 1; /* Take up remaining space */
+    }
+
+    .event-card .card-img-top {
+      width: 100%; /* Full width of the card */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: cover; /* Cover the card area */
     }
   </style>
   <title>Welcome to JSEA</title>
@@ -177,18 +200,23 @@
   </form>
 
   <!-- Event List -->
-  <section class="bg-dark text-dark p-5">
-    <div class="container mt-5">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+  <section class="bg-dark text-light p-5">
+    <div class="container event-list">
+      {{#unless hasSearched}}
+      <h1 class="mb-4">Here are the Top Events</h1>
+      {{/unless}}
+      {{#if hasSearched}}
+      <h1 class="mb-4">Here are the Top Events you searched for:</h1>
+      {{/if}} 
+      <div class="row">
         {{#each popularEvents}}
-        <div class="col mb-4">
-          <div class="card custom-card bg-transparent p-4 h-100 d-flex flex-column">
+        <div class="col-md-4 mb-4">
+          <div class="card event-card">
+            <img src="{{this.image}}" class="card-img-top" alt="Event Image"> <!-- Image moved outside of card-body -->
             <div class="card-body">
-              <h3 class="card-title">{{this.eventName}}</h3>
-              <p class="card-text text-muted">Date: {{this.eventDate}}</p>
-              <div class="mt-auto">
-                <a href="/site/public/oneEvent/{{this.EventId}}" class="btn btn-primary">Details</a>
-              </div>
+              <h5 class="card-title">{{this.name}}</h5>
+              <p class="card-text">{{this.date}}</p>
+              <a href="/site/public/oneEvent/{{this.id}}" class="btn btn-primary">Details</a>
             </div>
           </div>
         </div>
@@ -197,9 +225,9 @@
     </div>
   </section>
 
- <!-- Pagination -->
+  <!-- Pagination -->
   <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center bg-dark">
       <li class="page-item">
         <a class="page-link" href="#" id="prevPage" onclick="prevPage()">&lt; Previous</a>
       </li>

@@ -2,6 +2,7 @@ import url from 'url'
 import toHttpResponse from '../api/http-errors-response.mjs';
 import { deleteGroup, editGroup } from '../../data-mem/seca-data-mem.mjs';
 import { get } from 'http';
+import e from 'express';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -56,21 +57,42 @@ export default function(SERVICE){
     async function popularEventsPage(req, rsp){
         const limit = req.query.limit ? Number(req.query.limit) : undefined
         const page = req.query.page ? Number(req.query.page) : undefined
+        const searched = checkSearch(limit, page)
         const events = await SERVICE.getEvents(limit, page)
-        return {name: 'Events/popularEvents', data: { popularEvents : events, flag : req.user}}
+        const eventsDetailsResolved = await getEventsDetails(events)
+        return {name: 'Events/popularEvents', data: { popularEvents : eventsDetailsResolved, hasSearched: searched, flag : req.user}}
+    }
+
+    async function getEventsDetails(events){
+        const eventsDetails = await events.map(async event => await SERVICE.getEventDetails(event.EventId))
+        let eventsDetailsResolved = await Promise.all(eventsDetails)
+        return eventsDetailsResolved
+    }
+
+    function checkSearch(limit, page){
+        if(limit !== undefined || page !== undefined){
+            return true
+        }
+        return false
     }
 
     async function searchEventsPage(req, rsp){
         const limit = req.query.limit ? Number(req.query.limit) : undefined
         const page = req.query.page ? Number(req.query.page) : undefined
         const name = req.query.eventName;
+        let searched = false;
         let events;
+        let eventsDetailsResolved;
         if(name == undefined){
+            searched = checkSearch(limit, page)
             events = await SERVICE.getEvents(limit, page);
+            eventsDetailsResolved = await getEventsDetails(events)
         }else{
+            searched = true;
             events = await SERVICE.getEventsByName(limit, page, name);
+            eventsDetailsResolved = await getEventsDetails(events)
         }
-        return {name: 'Events/searchEvents', data: { searchedEvents : events, flag : req.user}}
+        return {name: 'Events/searchEvents', data: { searchedEvents : eventsDetailsResolved, hasSearched : searched, flag : req.user}}
     }
 
     async function oneEvent(req, rsp){

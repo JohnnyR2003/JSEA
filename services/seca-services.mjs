@@ -120,8 +120,14 @@ export default function(secaDatamem, secaUser, secaApi){
         //let eventName = event.name
 
         //let eventId = eventToAdd.eventId
+        console.log(eventId)
         let eventDetails = await secaApi.makeRequest([], secaApi.getEventsNotById, undefined, undefined, eventId)
-        console.log(eventDetails)
+        if(!eventDetails) {
+            //wait 1 second
+            await new Promise(r => setTimeout(r, 50))
+            eventDetails = await secaApi.makeRequest([], secaApi.getEventsNotById, undefined, undefined, eventId)
+        }
+        
 
         showDetails = {
             id : eventDetails.id, 

@@ -21,7 +21,7 @@ export async function makeRequest(list, action, limit, page, id, name) {
     try {
         let rsp = await fetch(URL)
         let obj = await rsp.json()
-        return action(obj, list)
+        return await action(obj, list)
     } catch (e) {
         console.log(e)
 
@@ -47,7 +47,7 @@ export function getEventsByName(obj, listOfEvents) {
     obj["_embedded"].events.forEach(event => listOfEvents.push({EventId: event.id, eventName: event.name, eventDate: event.dates['start'].localDate}));
 }
 
-export function getEventsNotById(obj){
+export async function getEventsNotById(obj){
     console.log(obj.id)
         let eventDetails = {
                             id : obj.id, 
@@ -64,7 +64,7 @@ export function getEventsNotById(obj){
         return eventDetails
 }
 
-export function getEventDetails(obj){
+export async function getEventDetails(obj){
 
     let genre = obj.classifications[0].genre
     let segment = obj.classifications[0].segment
