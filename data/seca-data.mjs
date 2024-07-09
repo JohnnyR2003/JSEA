@@ -1,3 +1,4 @@
+const api_key = 'f8VdrRIfAeuvJHoieqRpgQDasaXJAMX2'
 
 import fetch from 'node-fetch'
 
@@ -15,9 +16,9 @@ export async function makeRequest(list, action, limit, page, id, name) {
         p = 0
 
     let URL
-    if (action == PopularEvents) URL = `https://app.ticketmaster.com/discovery/v2/events.json?size=${l}&page=${p}&apikey=f8VdrRIfAeuvJHoieqRpgQDasaXJAMX2`
-    else if (action == getEventsByName) URL = `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${name}&size=${l}&page=${p}&apikey=f8VdrRIfAeuvJHoieqRpgQDasaXJAMX2`
-    else URL = `https://app.ticketmaster.com/discovery/v2/events/${id}?apikey=f8VdrRIfAeuvJHoieqRpgQDasaXJAMX2`
+    if (action == PopularEvents) URL = `https://app.ticketmaster.com/discovery/v2/events.json?size=${l}&page=${p}&apikey=${api_key}`
+    else if (action == getEventsByName) URL = `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${name}&size=${l}&page=${p}&apikey=${api_key}`
+    else URL = `https://app.ticketmaster.com/discovery/v2/events/${id}?apikey=${api_key}`
     try {
         let rsp = await fetch(URL)
         let obj = await rsp.json()
